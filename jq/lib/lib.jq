@@ -15,8 +15,8 @@
 #     "Name": "Apple Inc."
 #   }
 # ]
-def value_only_array: 
-    [to_entries[].value]
+def value_only_array:
+    if . then [to_entries[].value] end
 ;
 
 
@@ -35,11 +35,14 @@ def value_only_array:
 #   }
 # ]
 def flatten_key($dest_key):
-    [
-        to_entries[] | 
-        .value + (
-            [{key: $dest_key, value: .key}] | 
-            from_entries
-        )
-    ]
+    if .
+    then
+        [
+            to_entries[] |
+            .value + (
+                [{key: $dest_key, value: .key}] |
+                from_entries
+            )
+        ]
+    end
 ;

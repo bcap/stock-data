@@ -27,30 +27,30 @@
 #   }
 # ]
 
-.Earnings.Annual                        |= flatten_key("date") |
-.Earnings.History                       |= flatten_key("date") |
-.Earnings.Trend                         |= flatten_key("date") |
+.Earnings?.Annual?                          |= flatten_key("date") |
+.Earnings?.History?                         |= flatten_key("date") |
+.Earnings?.Trend?                           |= flatten_key("date") |
 
-.ESGScores.ActivitiesInvolvement 		|= value_only_array |
+.ESGScores?.ActivitiesInvolvement?          |= value_only_array |
 
-.Financials.Balance_Sheet.quarterly     |= flatten_key("date") |
-.Financials.Balance_Sheet.yearly        |= flatten_key("date") |
-.Financials.Cash_Flow.quarterly         |= flatten_key("date") |
-.Financials.Cash_Flow.yearly            |= flatten_key("date") |
-.Financials.Income_Statement.quarterly  |= flatten_key("date") |
-.Financials.Income_Statement.yearly     |= flatten_key("date") |
+.Financials?.Balance_Sheet?.quarterly?      |= flatten_key("date") |
+.Financials?.Balance_Sheet?.yearly?         |= flatten_key("date") |
+.Financials?.Cash_Flow?.quarterly?          |= flatten_key("date") |
+.Financials?.Cash_Flow?.yearly?             |= flatten_key("date") |
+.Financials?.Income_Statement?.quarterly?   |= flatten_key("date") |
+.Financials?.Income_Statement?.yearly?      |= flatten_key("date") |
 
-.General.Listings 						|= value_only_array | 
-.General.Officers 						|= value_only_array |
+.General?.Listings?                         |= value_only_array |
+.General?.Officers?                         |= value_only_array |
 
-.Holders.Funds 							|= value_only_array |
-.Holders.Institutions 					|= value_only_array |
+.Holders?.Funds?                            |= value_only_array |
+.Holders?.Institutions?                     |= value_only_array |
 
-.InsiderTransactions 					|= value_only_array | 
+.InsiderTransactions?                       |= value_only_array |
 
-.outstandingShares.annual 				|= value_only_array |
-.outstandingShares.quarterly 			|= value_only_array |
+.outstandingShares?.annual?                 |= value_only_array |
+.outstandingShares?.quarterly?              |= value_only_array |
 
-.SplitsDividends.NumberDividendsByYear 	|= value_only_array | 
+.SplitsDividends?.NumberDividendsByYear?    |= value_only_array |
 
 .
