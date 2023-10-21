@@ -85,3 +85,18 @@ func (r *Runner) launch(ctx context.Context, fn func(context.Context) error) wai
 		return err
 	}
 }
+
+func (r *Runner) fetchAndUpload(ctx context.Context, fetch func() ([]byte, error), s3Bucket string, s3Path string) error {
+	data, err := fetch()
+	if err != nil {
+		return err
+	}
+
+	etag, err := r.s3Client.Put(ctx, s3Bucket, s3Path, data)
+	if err != nil {
+		return err
+	}
+
+	log.Printf("s3://%s/%s: %s", s3Bucket, s3Path, etag)
+	return nil
+}

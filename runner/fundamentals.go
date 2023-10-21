@@ -3,28 +3,17 @@ package runner
 import (
 	"context"
 	"fmt"
-	"log"
 
 	"github.com/bcap/stock-data/config"
 )
 
 func (r *Runner) fundamentals(ctx context.Context) []waitable {
+	s3Bucket := string(r.Config.Fundamentals.S3Bucket)
+
 	work := func(ticker config.Ticker) error {
-		data, err := r.eodhdClient.Fundamentals(ctx, ticker)
-		if err != nil {
-			return err
-		}
-
-		s3Bucket := string(r.Config.Fundamentals.S3Bucket)
 		s3Path := fmt.Sprintf("%s/fundamentals.%s.json", r.Config.Fundamentals.S3Prefix, ticker)
-
-		etag, err := r.s3Client.Put(ctx, s3Bucket, s3Path, data)
-		if err != nil {
-			return err
-		}
-
-		log.Printf("s3://%s/%s: %s", s3Bucket, s3Path, etag)
-		return nil
+		fetch := func() ([]byte, error) { return r.eodhdClient.Fundamentals(ctx, ticker) }
+		return r.fetchAndUpload(ctx, fetch, s3Bucket, s3Path)
 	}
 
 	waitables := []waitable{}

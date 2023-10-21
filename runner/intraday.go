@@ -3,7 +3,6 @@ package runner
 import (
 	"context"
 	"fmt"
-	"log"
 	"time"
 
 	"github.com/bcap/stock-data/config"
@@ -17,24 +16,14 @@ func (r *Runner) historicalIntraday(ctx context.Context) []waitable {
 	work := func(ticker config.Ticker, from time.Time, to time.Time) error {
 		fromS := from.Format(s3PathDatelayout)
 		toS := to.Format(s3PathDatelayout)
-
 		s3Path := fmt.Sprintf(
 			"%s/interval-%s/historical-intraday-%s.%s.%s.%s.json",
 			r.Config.HistoricalIntraday.S3Prefix, interval, interval, ticker, fromS, toS,
 		)
-
-		data, err := r.eodhdClient.HistoricalIntraDay(ctx, ticker, interval, time.Time(from), time.Time(to))
-		if err != nil {
-			return err
+		fetch := func() ([]byte, error) {
+			return r.eodhdClient.HistoricalIntraDay(ctx, ticker, interval, time.Time(from), time.Time(to))
 		}
-
-		etag, err := r.s3Client.Put(ctx, s3Bucket, s3Path, data)
-		if err != nil {
-			return err
-		}
-
-		log.Printf("s3://%s/%s: %s", s3Bucket, s3Path, etag)
-		return nil
+		return r.fetchAndUpload(ctx, fetch, s3Bucket, s3Path)
 	}
 
 	start := time.Time(r.Config.HistoricalIntraday.TimeRange.From)
