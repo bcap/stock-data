@@ -10,16 +10,16 @@ CREATE EXTERNAL TABLE fundamentals (
 		`Sell`: int,
 		`StrongSell`: int
 	>,
-    `ESGScores` string, 
-    `Earnings` string, 
-    `Financials` string, 
-    `Highlights` string, 
-    `Holders` string, 
+    `ESGScores` string,
+    `Earnings` string,
+    `Financials` string,
+    `Highlights` string,
+    `Holders` string,
     `InsiderTransactions` string,
-    `SharesStats` string, 
-    `SplitsDividends` string, 
-    `Technicals` string, 
-    `Valuation` string, 
+    `SharesStats` string,
+    `SplitsDividends` string,
+    `Technicals` string,
+    `Valuation` string,
     `outstandingShares` string,
     `General` struct<
     	`Code`: string,
@@ -81,10 +81,10 @@ LOCATION 's3://bcap-stock-data/fundamentals/';
 
 DROP TABLE IF EXISTS fundamentals_plain_text;
 
-CREATE EXTERNAL TABLE fundamentals_plain_text ( 
+CREATE EXTERNAL TABLE fundamentals_plain_text (
 	data string
 )
 ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
-STORED AS INPUTFORMAT 'org.apache.hadoop.mapred.TextInputFormat' 
+STORED AS INPUTFORMAT 'org.apache.hadoop.mapred.TextInputFormat'
 OUTPUTFORMAT 'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat'
 LOCATION 's3://bcap-stock-data/fundamentals/';

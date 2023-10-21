@@ -5,18 +5,22 @@ import (
 	"time"
 )
 
+type empty struct{}
+
 type LoadOption string
 
-type LoadOptions map[LoadOption]struct{}
+type LoadOptions map[LoadOption]empty
 
 const (
+	LoadExchanges          LoadOption = "exchanges"
 	LoadFundamentals       LoadOption = "fundamentals"
 	LoadHistoricalIntraday LoadOption = "historical-intraday"
 )
 
 var allLoadOptions LoadOptions = LoadOptions{
-	LoadFundamentals:       struct{}{},
-	LoadHistoricalIntraday: struct{}{},
+	LoadExchanges:          empty{},
+	LoadFundamentals:       empty{},
+	LoadHistoricalIntraday: empty{},
 }
 
 var Default = Config{
@@ -33,6 +37,7 @@ var Default = Config{
 type Config struct {
 	Tickers            []Ticker           `yaml:"tickers"`
 	Load               LoadOptions        `yaml:"load"`
+	Exchanges          Exchanges          `yaml:"exchanges"`
 	Fundamentals       Fundamentals       `yaml:"fundamentals"`
 	HistoricalIntraday HistoricalIntraday `yaml:"historical-intraday"`
 	EODHD              EODHD              `yaml:"eodhd"`
@@ -40,16 +45,23 @@ type Config struct {
 	MaxParallel        int64              `yaml:"max-parallelism"`
 }
 
-type Fundamentals struct {
+type S3Stored struct {
 	S3Bucket Path `yaml:"s3-bucket"`
 	S3Prefix Path `yaml:"s3-prefix"`
 }
 
+type Exchanges struct {
+	S3Stored `yaml:",inline"`
+}
+
+type Fundamentals struct {
+	S3Stored `yaml:",inline"`
+}
+
 type HistoricalIntraday struct {
+	S3Stored  `yaml:",inline"`
 	TimeRange TimeRange `yaml:"time-range"`
 	Interval  string    `yaml:"interval"`
-	S3Bucket  Path      `yaml:"s3-bucket"`
-	S3Prefix  Path      `yaml:"s3-prefix"`
 }
 
 type TimeRange struct {
@@ -78,7 +90,7 @@ func (l *LoadOptions) UnmarshalYAML(unmarshaller func(any) error) error {
 		if _, ok := allLoadOptions[lo]; !ok {
 			return fmt.Errorf("unknown load option %s", value)
 		}
-		result[LoadOption(value)] = struct{}{}
+		result[LoadOption(value)] = empty{}
 	}
 	*l = result
 	return nil

@@ -9,8 +9,14 @@ import (
 	"github.com/bcap/stock-data/jq"
 )
 
+var normalizeExchanges = jq.LoadScript("normalizers/exchanges.jq")
 var normalizeFundamentals = jq.LoadScript("normalizers/fundamentals.jq")
 var normalizeHistoricalIntraday = jq.LoadScript("normalizers/historical-intraday.jq")
+
+func (c *Client) Exchanges(ctx context.Context) ([]byte, error) {
+	apiPath := fmt.Sprintf("api/exchanges-list/?api_token=%s", c.apiKey)
+	return c.process(ctx, apiPath, normalizeExchanges, nil)
+}
 
 func (c *Client) Fundamentals(ctx context.Context, ticker config.Ticker) ([]byte, error) {
 	apiPath := fmt.Sprintf("api/fundamentals/%s?api_token=%s", ticker, c.apiKey)
