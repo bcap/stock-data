@@ -12,7 +12,7 @@ func (r *Runner) fundamentals(ctx context.Context) []waitable {
 
 	work := func(ticker config.Ticker) error {
 		s3Path := fmt.Sprintf("%s/fundamentals.%s.json", r.Config.Fundamentals.S3Prefix, ticker)
-		fetch := func() ([]byte, error) { return r.eodhdClient.Fundamentals(ctx, ticker) }
+		fetch := func() ([]byte, error) { return r.eodhdClient.Fundamentals(ctx, ticker, r.start) }
 		return r.fetchAndUpload(ctx, fetch, s3Bucket, s3Path)
 	}
 

@@ -22,6 +22,7 @@ type Runner struct {
 	eodhdClient *eodhd.Client
 	s3Client    *s3.S3
 	executor    *executor.Executor[void]
+	start       time.Time
 }
 
 func New(cfg config.Config) *Runner {
@@ -39,6 +40,7 @@ func New(cfg config.Config) *Runner {
 }
 
 func (r *Runner) Run(ctx context.Context) error {
+	r.start = time.Now()
 	stopped := make(chan struct{})
 	defer close(stopped)
 

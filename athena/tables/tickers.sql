@@ -1,10 +1,11 @@
 DROP TABLE IF EXISTS tickers;
 
 CREATE EXTERNAL TABLE tickers (
+    `timestamp` timestamp,
     `Code` string,
     `Country` string,
     `Currency` string,
-    `Exchange` string,
+    `ExchangeGroup` string,
     `Exchange` string,
     `Isin` string,
     `Name` string,

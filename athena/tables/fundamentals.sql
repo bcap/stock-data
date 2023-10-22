@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS fundamentals;
 
 CREATE EXTERNAL TABLE fundamentals (
+    `timestamp` timestamp,
     `AnalystRatings` struct<
         `Rating`: float,
         `TargetPrice`: float,

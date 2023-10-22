@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS exchanges;
 
 CREATE EXTERNAL TABLE exchanges (
+    `timestamp` timestamp,
     `Code` string,
     `Country` string,
     `CountryISO2` string,

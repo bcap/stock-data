@@ -9,7 +9,7 @@ func (r *Runner) listExchanges(ctx context.Context) []waitable {
 	work := func() error {
 		s3Bucket := string(r.Config.ListExchanges.S3Bucket)
 		s3Path := fmt.Sprintf("%s/exchanges.json", r.Config.ListExchanges.S3Prefix)
-		fetch := func() ([]byte, error) { return r.eodhdClient.Exchanges(ctx) }
+		fetch := func() ([]byte, error) { return r.eodhdClient.Exchanges(ctx, r.start) }
 		return r.fetchAndUpload(ctx, fetch, s3Bucket, s3Path)
 	}
 	w := r.launch(ctx, func(ctx context.Context) error {
