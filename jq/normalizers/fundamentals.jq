@@ -43,8 +43,10 @@
 .General?.Listings?                         |= value_only_array |
 .General?.Officers?                         |= value_only_array |
 
-.Holders?.Funds?                            |= value_only_array |
-.Holders?.Institutions?                     |= value_only_array |
+# Merge .Holders.Funds and .Holders.Instituitions into a single array
+.Holders?.Funds?                            |= if . then [ value_only_array[] | {type: "fund"} + .] end |
+.Holders?.Institutions?                     |= if . then [ value_only_array[] | {type: "institution"} + .] end |
+.Holders?                                   |= (.Institutions? + .Funds?) |
 
 .InsiderTransactions?                       |= value_only_array |
 

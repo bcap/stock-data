@@ -14,26 +14,16 @@ CREATE EXTERNAL TABLE fundamentals (
     `Earnings` string,
     `Financials` string,
     `Highlights` string,
-    `Holders` struct<
-		`Funds` struct<
-			`change`: float,
-			`change_p`: float,
-			`current_shares`: int,
-			`date`: string,
-			`name`: string,
-			`totalAssets`: float,
-			`totalShares`: float
-		>,
-		`Institutions` struct<
-			`change`: float,
-			`change_p`: float,
-			`current_shares`: int,
-			`date`: string,
-			`name`: string,
-			`totalAssets`: float,
-			`totalShares`: float
-		>
-	>,
+    `Holders` array<struct<
+		`type`: string,
+		`change`: int,
+		`change_p`: float,
+		`currentShares`: int,
+		`date`: string,
+		`name`: string,
+		`totalAssets`: float,
+		`totalShares`: float
+	>>,
     `InsiderTransactions` string,
     `SharesStats` string,
     `SplitsDividends` string,
