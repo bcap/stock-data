@@ -7,7 +7,6 @@ require (
 	github.com/aws/aws-sdk-go-v2 v1.21.2
 	github.com/aws/aws-sdk-go-v2/config v1.18.45
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.40.2
-	github.com/barkimedes/go-deepcopy v0.0.0-20220514131651-17c30cfc62df
 	github.com/itchyny/gojq v0.12.13
 	golang.org/x/sync v0.4.0
 	gopkg.in/yaml.v2 v2.4.0
