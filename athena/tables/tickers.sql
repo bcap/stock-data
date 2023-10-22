@@ -5,7 +5,6 @@ CREATE EXTERNAL TABLE tickers (
     `Code` string,
     `Country` string,
     `Currency` string,
-    `ExchangeGroup` string,
     `Exchange` string,
     `Isin` string,
     `Name` string,

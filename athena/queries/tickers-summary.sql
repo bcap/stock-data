@@ -1,11 +1,11 @@
 select 
-    "exchangegroup",
+    "country",
     "type",
     count(1) as "amount"
 from tickers 
 group by
-    "exchangegroup",
+    "country",
     "type"
 order by
-    "exchangegroup" asc,
+    "country" asc,
     "type" asc
