@@ -35,14 +35,13 @@ def value_only_array:
 #   }
 # ]
 def flatten_key($dest_key):
-    if .
-    then
+    if . then
         [
             to_entries[] |
-            .value + (
+            (
                 [{key: $dest_key, value: .key}] |
                 from_entries
-            )
+            ) + .value 
         ]
     end
 ;
