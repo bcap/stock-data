@@ -4,7 +4,6 @@ import (
 	"io"
 	"os"
 
-	"github.com/barkimedes/go-deepcopy"
 	"gopkg.in/yaml.v2"
 )
 
@@ -13,7 +12,7 @@ func Load(path string) (Config, error) {
 	if err != nil {
 		return Config{}, err
 	}
-	cfg := deepcopy.MustAnything(Default).(Config)
+	cfg := Config{}
 	if err := Parse(f, &cfg); err != nil {
 		return Config{}, err
 	}

@@ -1,17 +1,28 @@
-load:
-- fundamentals
-- historical-intraday
+exchanges:
+- US
 
 tickers:
 - US.AAPL
 
 max-parallelism: 10
 
+list-exchanges:
+  enabled:   true
+  s3-bucket: my-s3-bucket
+  s3-prefix: fundamentals/
+
+list-tickers:
+  enabled:   true
+  s3-bucket: my-s3-bucket
+  s3-prefix: tickers/
+
 fundamentals:
+  enabled:   true
   s3-bucket: my-s3-bucket
   s3-prefix: fundamentals/
 
 historical-intraday:
+  enabled:   true
   s3-bucket: my-s3-bucket
   s3-prefix: historical-intraday/
   interval:  1m

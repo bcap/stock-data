@@ -54,13 +54,16 @@ func (r *Runner) Run(ctx context.Context) error {
 	}()
 
 	waitables := []waitable{}
-	if r.shouldRun(config.LoadExchanges) {
-		waitables = append(waitables, r.exchanges(ctx)...)
+	if r.Config.ListExchanges.Enabled {
+		waitables = append(waitables, r.listExchanges(ctx)...)
 	}
-	if r.shouldRun(config.LoadFundamentals) {
+	if r.Config.ListTickers.Enabled {
+		waitables = append(waitables, r.listTickers(ctx)...)
+	}
+	if r.Config.Fundamentals.Enabled {
 		waitables = append(waitables, r.fundamentals(ctx)...)
 	}
-	if r.shouldRun(config.LoadHistoricalIntraday) {
+	if r.Config.HistoricalIntraday.Enabled {
 		waitables = append(waitables, r.historicalIntraday(ctx)...)
 	}
 
@@ -69,11 +72,6 @@ func (r *Runner) Run(ctx context.Context) error {
 		return &ErrMultiple{Errors: errors}
 	}
 	return nil
-}
-
-func (r *Runner) shouldRun(lo config.LoadOption) bool {
-	_, ok := r.Config.Load[lo]
-	return ok
 }
 
 func (r *Runner) launch(ctx context.Context, fn func(context.Context) error) waitable {
