@@ -16,23 +16,17 @@ var normalizeHistoricalIntraday = jq.LoadScript("normalizers/historical-intraday
 
 func (c *Client) Exchanges(ctx context.Context, ts time.Time) ([]byte, error) {
 	apiPath := fmt.Sprintf("api/exchanges-list/?api_token=%s&fmt=json", c.apiKey)
-	return c.process(ctx, apiPath, normalizeExchanges, insertTs(ts))
+	return c.process(ctx, apiPath, normalizeExchanges, insertTsFn(ts))
 }
 
 func (c *Client) Tickers(ctx context.Context, exchange string, ts time.Time) ([]byte, error) {
 	apiPath := fmt.Sprintf("api/exchange-symbol-list/%s?api_token=%s&fmt=json", exchange, c.apiKey)
-	parsedHook := func(v any) error {
-		m := v.(map[string]any)
-		m["ExchangeGroup"] = exchange
-		m["timestamp"] = ts.UTC().Unix()
-		return nil
-	}
-	return c.process(ctx, apiPath, normalizeTickers, parsedHook)
+	return c.process(ctx, apiPath, normalizeTickers, insertTsFn(ts))
 }
 
 func (c *Client) Fundamentals(ctx context.Context, ticker config.Ticker, ts time.Time) ([]byte, error) {
 	apiPath := fmt.Sprintf("api/fundamentals/%s?api_token=%s", ticker, c.apiKey)
-	return c.process(ctx, apiPath, normalizeFundamentals, insertTs(ts))
+	return c.process(ctx, apiPath, normalizeFundamentals, insertTsFn(ts))
 }
 
 func (c *Client) HistoricalIntraDay(ctx context.Context, ticker config.Ticker, interval string, from time.Time, to time.Time) ([]byte, error) {
@@ -45,7 +39,7 @@ func (c *Client) HistoricalIntraDay(ctx context.Context, ticker config.Ticker, i
 	return c.process(ctx, apiPath, normalizeHistoricalIntraday, parsedHook)
 }
 
-func insertTs(ts time.Time) jq.ParsedHook {
+func insertTsFn(ts time.Time) jq.ParsedHook {
 	return func(v any) error {
 		m := v.(map[string]any)
 		m["timestamp"] = ts.UTC().Unix()

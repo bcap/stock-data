@@ -2,7 +2,7 @@ exchanges:
 - US
 
 tickers:
-- US.AAPL
+- AAPL.US
 
 max-parallelism: 10
 

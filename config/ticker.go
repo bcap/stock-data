@@ -6,8 +6,8 @@ import (
 )
 
 type Ticker struct {
-	Market string
 	Symbol string
+	Market string
 }
 
 func (t Ticker) String() string {
@@ -24,12 +24,22 @@ func (t *Ticker) UnmarshalYAML(unmarshaller func(any) error) error {
 		return err
 	}
 	split := strings.Split(v, ".")
-	if len(split) != 2 {
-		return fmt.Errorf("ticker is not in the <market>.<symbol> format")
+
+	if len(split) == 1 {
+		*t = Ticker{
+			Symbol: split[0],
+			Market: "US",
+		}
+		return nil
 	}
-	*t = Ticker{
-		Market: split[0],
-		Symbol: split[1],
+
+	if len(split) == 2 {
+		*t = Ticker{
+			Symbol: split[0],
+			Market: split[1],
+		}
+		return nil
 	}
-	return nil
+
+	return fmt.Errorf("ticker is not in the <market>.<symbol> format")
 }

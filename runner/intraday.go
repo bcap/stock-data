@@ -18,7 +18,7 @@ func (r *Runner) historicalIntraday(ctx context.Context) []waitable {
 		toS := to.Format(s3PathDatelayout)
 		s3Path := fmt.Sprintf(
 			"%s/interval-%s/historical-intraday-%s.%s.%s.%s.json",
-			r.Config.HistoricalIntraday.S3Prefix, interval, interval, ticker, fromS, toS,
+			r.Config.HistoricalIntraday.S3Prefix, interval, interval, fromS, toS, ticker,
 		)
 		fetch := func() ([]byte, error) {
 			return r.eodhdClient.HistoricalIntraDay(ctx, ticker, interval, time.Time(from), time.Time(to))
