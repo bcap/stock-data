@@ -2,13 +2,13 @@ DROP TABLE IF EXISTS tickers;
 
 CREATE EXTERNAL TABLE tickers (
     `timestamp` timestamp,
-    `Code` string,
-    `Country` string,
-    `Currency` string,
-    `Exchange` string,
-    `Isin` string,
-    `Name` string,
-    `Type` string
+    `code` string,
+    `country` string,
+    `currency` string,
+    `exchange` string,
+    `isin` string,
+    `name` string,
+    `type` string
 )
 ROW FORMAT SERDE 'org.openx.data.jsonserde.JsonSerDe'
 LOCATION 's3://bcap-stock-data/tickers/';

@@ -54,3 +54,30 @@ type AWS struct {
 	Region  string `yaml:"region"`
 	Profile string `yaml:"profile"`
 }
+
+func (c *Config) UnmarshalYAML(unmarshaller func(any) error) error {
+	type raw Config
+	v := raw{}
+	if err := unmarshaller(&v); err != nil {
+		return err
+	}
+	*c = Config(v)
+	c.Tickers = unique(c.Tickers, func(v *Ticker) string { return v.String() })
+	c.Exchanges = unique(c.Exchanges, func(v *string) string { return *v })
+	return nil
+}
+
+func unique[T any](input []T, keyFn func(v *T) string) []T {
+	if input == nil {
+		return nil
+	}
+	seen := map[string]struct{}{}
+	result := []T{}
+	for _, v := range input {
+		if _, ok := seen[keyFn(&v)]; ok {
+			continue
+		}
+		result = append(result, v)
+	}
+	return result
+}

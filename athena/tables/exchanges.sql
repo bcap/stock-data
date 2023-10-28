@@ -2,12 +2,12 @@ DROP TABLE IF EXISTS exchanges;
 
 CREATE EXTERNAL TABLE exchanges (
     `timestamp` timestamp,
-    `Code` string,
-    `Country` string,
-    `CountryISO2` string,
-    `CountryISO3` string,
-    `Name` string,
-    `OperatingMIC` array<string>
+    `code` string,
+    `country` string,
+    `countryiso2` string,
+    `countryiso3` string,
+    `name` string,
+    `operatingmic` array<string>
 )
 ROW FORMAT SERDE 'org.openx.data.jsonserde.JsonSerDe'
 LOCATION 's3://bcap-stock-data/exchanges/';

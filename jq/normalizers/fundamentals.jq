@@ -28,70 +28,74 @@
 # ]
 
 
-.General?.Listings?                         |= value_only_array |
-.General?.Officers?                         |= value_only_array |
+# first converts all keys to lowercase
+recurse(ascii_downcase; .) |
 
-if .Earnings? then
-    .Earnings?.Annual?                      |= flatten_key("date") |
-    .Earnings?.History?                     |= flatten_key("date") |
-    .Earnings?.Trend?                       |= flatten_key("date")
+
+.general?.listings?                         |= value_only_array |
+.general?.officers?                         |= value_only_array |
+
+if .earnings? then
+    .earnings?.annual?                      |= flatten_key("date") |
+    .earnings?.history?                     |= flatten_key("date") |
+    .earnings?.trend?                       |= flatten_key("date")
 end                                         |
 
-if .ESGScores? then
-    .ESGScores.ActivitiesInvolvement?       |= value_only_array
+if .esgscores? then
+    .esgscores.activitiesinvolvement?       |= value_only_array
 end                                         |
 
-if .ETF_Data? then
-    .ETF_Data.Asset_Allocation?             |= flatten_key("type") |
-    .ETF_Data.World_Regions?                |= flatten_key("region") |
-    .ETF_Data.Sector_Weights?               |= flatten_key("sector") |
-    .ETF_Data.Fixed_Income?                 |= flatten_key("type") |
+if .etf_data? then
+    .etf_data.asset_allocation?             |= flatten_key("type") |
+    .etf_data.world_regions?                |= flatten_key("region") |
+    .etf_data.sector_weights?               |= flatten_key("sector") |
+    .etf_data.fixed_income?                 |= flatten_key("type") |
 
     # we dont need top 10 holdings when we have all holdings
-    .ETF_Data.Holdings?                     |= value_only_array |
-    del(.ETF_Data.Top_10_Holdings)          |
+    .etf_data.holdings?                     |= value_only_array |
+    del(.etf_data.top_10_holdings)          |
 
-    # Valuations_Growth seems to try to put 2 different types of keys (Valuations and Growth) into the same Valuations_Growth key
-    # Here we split those 2 back into 2 different keys
-    .ETF_Data.Valuations = [
-        {type: "Portfolio"} + .ETF_Data?.Valuations_Growth?.Valuations_Rates_Portfolio?,
-        {type: "Category"} +  .ETF_Data?.Valuations_Growth?.Valuations_Rates_To_Category?
+    # valuations_growth seems to try to put 2 different types of keys (valuations and growth) into the same valuations_growth key
+    # here we split those 2 back into 2 different keys
+    .etf_data.valuations = [
+        {type: "portfolio"} + .etf_data?.valuations_growth?.valuations_rates_portfolio?,
+        {type: "category"} +  .etf_data?.valuations_growth?.valuations_rates_to_category?
     ] |
-    .ETF_Data.Growth = [
-        {type: "Portfolio"} + .ETF_Data?.Valuations_Growth?.Growth_Rates_Portfolio?,
-        {type: "Category"} +  .ETF_Data?.Valuations_Growth?.Growth_Rates_To_Category?
+    .etf_data.growth = [
+        {type: "portfolio"} + .etf_data?.valuations_growth?.growth_rates_portfolio?,
+        {type: "category"} +  .etf_data?.valuations_growth?.growth_rates_to_category?
     ] |
-    del(.ETF_Data.Valuations_Growth)
+    del(.etf_data.valuations_growth)
 end                                         |
 
-if .Financials? then
-    .Financials?.Balance_Sheet?.quarterly?      |= flatten_key("date") |
-    .Financials?.Balance_Sheet?.yearly?         |= flatten_key("date") |
-    .Financials?.Cash_Flow?.quarterly?          |= flatten_key("date") |
-    .Financials?.Cash_Flow?.yearly?             |= flatten_key("date") |
-    .Financials?.Income_Statement?.quarterly?   |= flatten_key("date") |
-    .Financials?.Income_Statement?.yearly?      |= flatten_key("date")
+if .financials? then
+    .financials?.balance_sheet?.quarterly?      |= flatten_key("date") |
+    .financials?.balance_sheet?.yearly?         |= flatten_key("date") |
+    .financials?.cash_flow?.quarterly?          |= flatten_key("date") |
+    .financials?.cash_flow?.yearly?             |= flatten_key("date") |
+    .financials?.income_statement?.quarterly?   |= flatten_key("date") |
+    .financials?.income_statement?.yearly?      |= flatten_key("date")
 end                                             |
 
-# Merge .Holders.Funds and .Holders.Instituitions into a single .Holders array
-if .Holders? then
-    .Holders?                               |= (
-        if .Funds?        then [ .Funds        | value_only_array[] | {type: "fund"}        + .] else [] end +
-        if .Institutions? then [ .Institutions | value_only_array[] | {type: "institution"} + .] else [] end
+# merge .holders.funds and .holders.instituitions into a single .holders array
+if .holders? then
+    .holders?                               |= (
+        if .funds?        then [ .funds        | value_only_array[] | {type: "fund"}        + .] else [] end +
+        if .institutions? then [ .institutions | value_only_array[] | {type: "institution"} + .] else [] end
     )
 end                                         |
 
-if .InsiderTransactions? then
-    .InsiderTransactions                    |= value_only_array
+if .insidertransactions? then
+    .insidertransactions                    |= value_only_array
 end                                         |
 
-if .outstandingShares? then
-    .outstandingShares.annual?              |= value_only_array |
-    .outstandingShares.quarterly?           |= value_only_array
+if .outstandingshares? then
+    .outstandingshares.annual?              |= value_only_array |
+    .outstandingshares.quarterly?           |= value_only_array
 end                                         |
 
-if .SplitsDividends? then
-    .SplitsDividends?.NumberDividendsByYear?    |= value_only_array
+if .splitsdividends? then
+    .splitsdividends?.numberdividendsbyyear?    |= value_only_array
 end                                             |
 
 .

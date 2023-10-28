@@ -41,7 +41,21 @@ def flatten_key($dest_key):
             (
                 [{key: $dest_key, value: .key}] |
                 from_entries
-            ) + .value 
+            ) + .value
         ]
+    end
+;
+
+# recurses the whole json object, applying keyFn to the keys (if available) and valueFn to all the values
+def recurse(keyFn; valueFn):
+    if type == "object" then
+        with_entries({
+            key: .key | keyFn,
+            value: .value | recurse(keyFn; valueFn)
+        })
+    elif type == "array" then
+        map(recurse(keyFn; valueFn))
+    else
+        . | valueFn
     end
 ;
