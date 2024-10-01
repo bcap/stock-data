@@ -29,5 +29,8 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.17.3 // indirect
 	github.com/aws/aws-sdk-go-v2/service/sts v1.23.2 // indirect
 	github.com/aws/smithy-go v1.15.0 // indirect
+	github.com/benbjohnson/clock v1.3.5 // indirect
 	github.com/itchyny/timefmt-go v0.1.5 // indirect
+	go.uber.org/ratelimit v0.3.0 // indirect
+	golang.org/x/time v0.3.0 // indirect
 )

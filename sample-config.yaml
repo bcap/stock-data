@@ -4,7 +4,7 @@ exchanges:
 tickers:
 - AAPL.US
 
-max-parallelism: 10
+max-parallelism: 100
 
 list-exchanges:
   enabled:   true

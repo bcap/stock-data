@@ -5,17 +5,27 @@ import (
 	"io"
 	"log"
 	"net/http"
+
+	"golang.org/x/time/rate"
 )
 
-var defaultTransport = loggedTransport{
-	RoundTripper: http.DefaultTransport,
-}
-
-type loggedTransport struct {
+type transport struct {
 	http.RoundTripper
+	limitter *rate.Limiter
 }
 
-func (t *loggedTransport) RoundTrip(req *http.Request) (*http.Response, error) {
+func newTransport(limitter *rate.Limiter) *transport {
+	return &transport{
+		RoundTripper: http.DefaultTransport,
+		limitter:     limitter,
+	}
+}
+
+func (t *transport) RoundTrip(req *http.Request) (*http.Response, error) {
+	if t.limitter != nil {
+		t.limitter.Wait(req.Context())
+	}
+
 	resp, err := t.RoundTripper.RoundTrip(req)
 	if err != nil {
 		log.Printf("%s %s -> %s", req.Method, req.URL, err)

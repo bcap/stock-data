@@ -47,7 +47,8 @@ type TimeRange struct {
 }
 
 type EODHD struct {
-	ApiKey string `yaml:"api-key"`
+	ApiKey               string `yaml:"api-key"`
+	MaxRequestsPerMinute int    `yaml:"max-requests-per-min"`
 }
 
 type AWS struct {

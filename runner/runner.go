@@ -33,7 +33,7 @@ func New(cfg config.Config) *Runner {
 	)
 	return &Runner{
 		Config:      cfg,
-		eodhdClient: eodhd.NewClient(cfg.EODHD.ApiKey),
+		eodhdClient: eodhd.NewClient(cfg.EODHD.ApiKey, eodhd.WithMaxRequestsPerMinute(cfg.EODHD.MaxRequestsPerMinute)),
 		s3Client:    s3.New(awsCfg),
 		executor:    executor.New[struct{}](cfg.MaxParallel),
 	}

@@ -6,9 +6,11 @@ import (
 	"io"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/bcap/stock-data/jq"
 	"github.com/itchyny/gojq"
+	"golang.org/x/time/rate"
 )
 
 type Client struct {
@@ -28,11 +30,23 @@ func WithBaseURL(baseURL string) ClientOption {
 	}
 }
 
+func WithMaxRequestsPerMinute(maxReqsPerMinute int) ClientOption {
+	return func(c *Client) {
+		var limitter *rate.Limiter
+		if maxReqsPerMinute > 0 {
+			limitter = rate.NewLimiter(rate.Every(time.Minute), maxReqsPerMinute)
+		}
+		c.client = http.Client{Transport: newTransport(limitter)}
+	}
+}
+
 func NewClient(apiKey string, options ...ClientOption) *Client {
+	// eodhd is limitted to a 1000 reqs per min
+	limitter := rate.NewLimiter(rate.Every(time.Minute), 1000)
 	c := Client{
 		baseURL: "https://eodhd.com/",
 		apiKey:  apiKey,
-		client:  http.Client{Transport: &defaultTransport},
+		client:  http.Client{Transport: newTransport(limitter)},
 	}
 	for _, opt := range options {
 		opt(&c)
